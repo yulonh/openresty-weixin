@@ -16,7 +16,7 @@ if not ngx.ctx.user.userinfo and has_userinfo then
     if not res then
         ngx.status = ngx.HTTP_BAD_REQUEST
         ngx.say(json.encode({code = -1, msg = err_msg}))
-        ngx.exit(ngx.HTTP_BAD_REQUEST)
+        return ngx.exit(ngx.HTTP_BAD_REQUEST)
     end
 
     if not res.errcode then
@@ -31,14 +31,14 @@ if not ngx.ctx.user.userinfo and has_userinfo then
             ngx.log(ngx.ERR, err_msg, err)
             ngx.status = ngx.HTTP_BAD_REQUEST
             ngx.say(json.encode({code = -1, msg = err_msg}))
-            ngx.exit(ngx.HTTP_BAD_REQUEST)
+            return ngx.exit(ngx.HTTP_BAD_REQUEST)
         else
             local res, err = red:hgetall(access_token)
             if res and table.getn(res)>0 then
                 user = red:array_to_hash(res)
                 ngx.ctx.user = user
                 ngx.say(json.encode(ngx.ctx.user))
-                ngx.exit(ngx.HTTP_OK)
+                return ngx.exit(ngx.HTTP_OK)
             end
         end
     else
@@ -47,11 +47,11 @@ if not ngx.ctx.user.userinfo and has_userinfo then
         ngx.status = ngx.HTTP_BAD_REQUEST
         ngx.say(json.errcode({code=-1,msg=err_msg}))
         ngx.log(ngx.ERR, err_msg)
-        ngx.exit(ngx.HTTP_BAD_REQUEST)
+        return ngx.exit(ngx.HTTP_BAD_REQUEST)
     end
 else
     ngx.say(json.encode(ngx.ctx.user))
-    ngx.exit(ngx.HTTP_OK)
+    return ngx.exit(ngx.HTTP_OK)
 end
 
 

@@ -12,7 +12,7 @@ local access_token = ngx.var.cookie_access_token
 if access_token == nil or access_token == '' then
     ngx.status = ngx.HTTP_UNAUTHORIZED
     ngx.say(json.encode({code=-1,msg="access_token无效"}))
-    ngx.exit(ngx.HTTP_UNAUTHORIZED)
+    return ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
 
 local function refresh_token()

@@ -22,7 +22,7 @@ local res, err = wx.getJSON(config.access_token_url, {
 if not res then
     ngx.status = ngx.HTTP_BAD_REQUEST
     ngx.say(json.encode({code = -1, msg = err}))
-    ngx.exit(ngx.HTTP_BAD_REQUEST)
+    return ngx.exit(ngx.HTTP_BAD_REQUEST)
 end
 
 if not res.errcode then
@@ -55,14 +55,14 @@ if not res.errcode then
         ngx.log(ngx.ERR, err_msg, err)
         ngx.status = ngx.HTTP_BAD_REQUEST
         ngx.say(json.encode({code = -1, msg = err_msg}))
-        ngx.exit(ngx.HTTP_BAD_REQUEST)
+        return ngx.exit(ngx.HTTP_BAD_REQUEST)
     else
         local redirect_uri = args.redirect_uri
             if redirect_uri == nil or redirect_uri == "" then
                 ngx.say(json.encode({code = 0, msg = "login success"}))
-                ngx.exit(ngx.HTTP_OK)
+                return ngx.exit(ngx.HTTP_OK)
             else
-                ngx.redirect(redirect_uri)
+                return ngx.redirect(redirect_uri)
             end
     end
 else
@@ -70,7 +70,7 @@ else
     ngx.status = ngx.HTTP_BAD_REQUEST
     ngx.say(json.encode({code=-1,msg=err_msg}))
     ngx.log(ngx.ERR, err_msg)
-    ngx.exit(ngx.HTTP_BAD_REQUEST)
+    return ngx.exit(ngx.HTTP_BAD_REQUEST)
 end
 
 
