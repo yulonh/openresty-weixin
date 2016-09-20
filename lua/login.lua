@@ -57,8 +57,13 @@ if not res.errcode then
         ngx.say(json.encode({code = -1, msg = err_msg}))
         ngx.exit(ngx.HTTP_BAD_REQUEST)
     else
-        ngx.say(json.encode({code = 0, msg = "login success"}))
-        ngx.exit(ngx.HTTP_OK)
+        local redirect_uri = args.redirect_uri
+            if redirect_uri == nil or redirect_uri == "" then
+                ngx.say(json.encode({code = 0, msg = "login success"}))
+                ngx.exit(ngx.HTTP_OK)
+            else
+                ngx.redirect(redirect_uri)
+            end
     end
 else
     local err_msg = ERR_CODE[res.errcode]
