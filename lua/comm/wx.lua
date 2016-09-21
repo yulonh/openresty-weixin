@@ -1,6 +1,5 @@
 local json = require("cjson.safe")
 local http = require "resty.http"
-local httpc = http.new()
 
 local _M = {}
 
@@ -10,6 +9,8 @@ function _M.getJSON(uri, query, body)
     if body ~= nil and body ~= '' then
         method = 'POST'
     end
+
+    local httpc = http.new()
     local res, err = httpc:request_uri(uri, {
         method = method,
         query = query,
