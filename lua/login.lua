@@ -30,7 +30,7 @@ if not res.errcode then
     -- 设置cookie
     ngx.header["Set-Cookie"]="access_token="..access_token..";Path=/; HttpOnly"
     -- 存入用户信息到redis
-    local redis = require "comm.redis"
+    local redis = require("comm.redis")
     local red = redis:new()
     local outdate_token = red:get(res.openid)
     red:init_pipeline()
